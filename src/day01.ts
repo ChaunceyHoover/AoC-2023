@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 
-const rawData = fs.readFileSync('data/day01.txt', 'utf8');
+const rawData = fs.readFileSync('data/day01.txt', 'utf8').replaceAll('\r', '');
 const data = rawData.split('\n');
 
 let total = 0;
