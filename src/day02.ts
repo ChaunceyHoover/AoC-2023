@@ -37,7 +37,8 @@ function ParseCubeSelection(gameResults: string): Cubes[] {
     return cubes;
 }
 
-let totalIds = 0;
+let totalIds = 0,
+    power = 0;
 
 for (const row of data) {
     // Skip empty rows
@@ -52,13 +53,28 @@ for (const row of data) {
 
     // Check if it's possible to have only 12 red cubes, 13 green cubes, 14 blue cubes
     let possible = true;
+
+    // Get minimum value possible for all cubes (default to 1 instead of 0 since it's multiplication)
+    let minRed = 1,
+        minGreen = 1,
+        minBlue = 1;
+
     for (const result of results) {
         if (result.red > 12 || result.green > 13 || result.blue > 14) {
             possible = false;
         }
+        
+        // Get minimum possible amount of cubes possible for this game to be possible
+        minRed = Math.max(minRed, result.red);
+        minGreen = Math.max(minGreen, result.green);
+        minBlue = Math.max(minBlue, result.blue);
     }
+    
+    // Add "power" of cubes
+    power += (minRed * minGreen * minBlue);
 
-    if (possible) totalIds += gameId;
+    if (possible) totalIds += gameId; 
 }
 
 console.log('sum of game IDs:', totalIds);
+console.log('power of all sets:', power);
