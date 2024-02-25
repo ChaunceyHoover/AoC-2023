@@ -24,19 +24,52 @@ const posToXy = (pos: number): Point => {
     }
 }
 
+function getFullNumber(data: string, index: number): number {
+    let fullNumber = data.charAt(index);
+
+    let startIndex = index;
+    while (true) {
+        const leftChar = data.charAt(--startIndex);
+        if (leftChar.match('\d') == null) break;
+
+        fullNumber = leftChar + fullNumber;
+    }
+
+    startIndex = index
+    while (true) {
+        const rightChar = data.charAt(++startIndex);
+        if (rightChar.match('\d') == null) break;
+
+        fullNumber += rightChar;
+    }
+
+    return Number(fullNumber);
+}
+
 for (let y = 1; y < height - 2; y++) {
     for (let x = 1; x < width - 2; x++) {
         const char = rawData[xyToPos(x, y)];
         const isSymbol = symbols.indexOf(char) !== -1;
         if (isSymbol) {
-            console.log(`${char} is symbol at ${xyToPos(x, y)}`)
             const symbolIndex = xyToPos(x, y);
-            const startOfRow = Math.floor(symbolIndex / width),
-                  endOfRow = Math.floor(symbolIndex / width) + width - 1;
+            const startOfRow = y * width,
+                  endOfRow = ((y + 1) * width) - 1;
 
-            console.log('top', rawData.substring(startOfRow - width, endOfRow - width));
-            console.log('left', rawData.substring(startOfRow, symbolIndex));
-            console.log('right', rawData.substring(symbolIndex + 1, endOfRow));
+            const aboveData = rawData.substring(startOfRow - width, endOfRow - width);
+                //   leftData = rawData.substring(startOfRow, symbolIndex),
+                //   belowData = rawData.substring(startOfRow + width, endOfRow + width),
+                //   rightData = rawData.substring(symbolIndex + 1, endOfRow);
+
+            console.log(rawData[xyToPos(x, y - 1)]);
+            const aboveNumber = getFullNumber(aboveData, xyToPos(x, y - 1));
+                //   leftNumber = getFullNumber(leftData, xyToPos(x - 1, y)),
+                //   belowNumber = getFullNumber(belowData, xyToPos(x, y + 1)),
+                //   rightNumber = getFullNumber(rightData, xyToPos(x + 1, y));
+            
+            console.log('above', aboveNumber);
+            // console.log('left', leftNumber);
+            // console.log('below', belowNumber);
+            // console.log('right', rightNumber);
             break;
         }
     }
